@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_test_app/custom_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,7 +26,7 @@ class MyPainter extends StatelessWidget {
         title: Text('Lines'),
       ),
       body: CustomPaint(
-        painter: ShapePainter(),
+        painter: CustomView(),
         child: Container(),
       ),
     );
@@ -33,41 +34,44 @@ class MyPainter extends StatelessWidget {
 }
 
 // FOR PAINTING LINES
-class ShapePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = Colors.teal
-      ..strokeWidth = 5
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+// class ShapePainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     var paint = Paint()
+//       ..color = Colors.teal
+//       ..strokeWidth = 5
+//       ..style = PaintingStyle.stroke
+//       ..strokeCap = StrokeCap.round;
 
-    canvas.drawRRect(RRect.fromLTRBR(100, 100, 200, 200, Radius.zero), paint);
+//     canvas.drawRRect(RRect.fromLTRBR(100, 100, 200, 200, Radius.zero), paint);
 
-    final textStyle = TextStyle(
-      color: Colors.black,
-      fontSize: 30,
-    );
-    final textSpan = TextSpan(
-      text: 'Hello, world.',
-      style: textStyle,
-    );
-    final textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout(
-      minWidth: 0,
-      maxWidth: size.width,
-    );
-    final xCenter = (size.width - textPainter.width) / 2;
-    final yCenter = (size.height - textPainter.height) / 2;
-    final offset = Offset(xCenter, yCenter);
-    textPainter.paint(canvas, offset);
-  }
+//     final textStyle = TextStyle(
+//       color: Colors.black,
+//       fontSize: 30,
+//     );
 
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
+//     final textSpan = TextSpan(
+//       text: 'Hello, world.',
+//       style: textStyle,
+//     );
+//     final textPainter = TextPainter(
+//       text: textSpan,
+//       textDirection: TextDirection.ltr,
+//     );
+
+//     textPainter.layout(
+//       minWidth: 0,
+//       maxWidth: size.width,
+//     );
+
+//     final xCenter = (size.width - textPainter.width) / 2;
+//     final yCenter = (size.height - textPainter.height) / 2;
+//     final offset = Offset(xCenter, yCenter);
+//     textPainter.paint(canvas, offset);
+//   }
+
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return false;
+//   }
+// }
