@@ -22,13 +22,35 @@ class MyPainter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Lines'),
-      ),
-      body: CustomPaint(
-        painter: CustomView(),
-        child: Container(),
-      ),
+        appBar: AppBar(
+          title: Text('Lines'),
+        ),
+        body:
+
+        Builder(
+            builder: (BuildContext context) {
+              AnimationController controller = AnimationController(
+                duration: Duration(milliseconds: 500),
+                vsync: Scaffold.of(context),
+              );
+              return Column(
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () => controller.forward(from: 0.0),
+                    child: Text('press me to start the animation'),
+                  ),
+                  Expanded(
+                    child: SizedBox.expand(
+                      child: CustomPaint(
+                        painter: CustomView(),
+                        child: Container(),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }
+        )
     );
   }
 }
