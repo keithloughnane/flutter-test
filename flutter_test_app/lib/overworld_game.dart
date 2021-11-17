@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'world.dart';
 
 class OverWorldGame {
-  var offsetX = 0.0;
-  var offsetY = 0.0;
-  var scale = 5.0;
+  var offsetX = 10.0;
+  var offsetY = 10.0;
+  var scale = 3.0;
 
   late World world;
 
@@ -21,6 +21,32 @@ class OverWorldGame {
   var selectedPaint = Paint()
     ..color = const Color.fromARGB(254, 254, 0, 0)
     ..style = PaintingStyle.fill;
+
+  void showCrimeDetails(Canvas canvas, Crime? crime) {
+    if (crime != null) {
+      print("KLTest victim = " + crime.victim.toString());
+
+      var victim = getBuildingFromPerson(crime.victim);
+
+      print("KLTest victim building = " + victim.toString());
+
+      var fence = getBuildingFromPerson(crime.fence);
+
+      if (victim != null) {
+        var offset = Offset(
+            (victim.x1 + (victim.width / 2)  + offsetX) * scale,
+            (victim.y1 + (victim.height / 2) + offsetY) *
+                scale); //TODO make my own draw methods so I can reuse scale and offset
+        canvas.drawCircle(offset, 10, selectedPaint);
+      }
+
+      if (fence != null) {
+        var offset =
+            Offset((fence.x1 + (fence.width / 2) + offsetX) * scale, (fence.y1 + (fence.height / 2) + offsetY) * scale);
+        canvas.drawCircle(offset, 10, circlePaint);
+      }
+    }
+  }
 
   void render(Canvas canvas, Size size) {
     for (var building in world.buildings) {
@@ -49,11 +75,18 @@ class OverWorldGame {
       );
 
       final offset = Offset(
-          (building.x1 + offsetX) * scale,
-          (building.y1 + offsetY) * scale);
+          (building.x1 + offsetX) * scale, (building.y1 + offsetY) * scale);
 
       textPainter.paint(canvas, offset);
-    }
+
+      // print("KLTest Crimes: " + world.crimes.toString());
+      // if (world.crimes != null && world.crimes!.isNotEmpty) {
+      //   showCrimeDetails(canvas, world.crimes![0]);
+      // }
+
+      for (var crime in world.crimes!) {
+        showCrimeDetails(canvas, crime);
+      }}
   }
 
   void setWorld(World world) {
@@ -67,7 +100,19 @@ class OverWorldGame {
 
   void findSelectedBuilding(List<Building> buildings, double x, double y) {
     for (var element in buildings) {
-        element.setSelected(element.isInside(x, y));
+      element.setSelected(element.isInside(x, y));
     }
+  }
+
+  Building? getBuildingFromPerson(Person? victim) {
+    Building? result;
+    world.buildings.forEach((building) {
+      if (building.occupants.contains(victim)) {
+        result = building;
+        return;
+      }
+    });
+
+    return result;
   }
 }

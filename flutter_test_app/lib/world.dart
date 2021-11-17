@@ -5,8 +5,9 @@ import 'package:flutter/foundation.dart';
 class World {
   int noBuildings = 20;
   late List<Building> buildings = <Building>[];
+  List<Crime>? crimes;
 
-  World() {}
+  World();
 }
 
 class WorldBuilder {
@@ -21,11 +22,13 @@ class WorldBuilder {
 
     var world = World();
 
-    for (int i = 0; i < 20; i++) {
-      var building = Building(i.toString(), 10, i * 22);
-      var type = BuildingType.values[random.nextInt(4)];
-      building.type = type;
-      world.buildings.add(building);
+    for (int x = 0; x < 10; x++) {
+      for (int y = 0; y < 5; y++) {
+        var building = Building("", x * 11, y * 22);
+        var type = BuildingType.values[random.nextInt(4)];
+        building.type = type;
+        world.buildings.add(building);
+      }
     }
 
     for (var element in world.buildings) {
@@ -39,7 +42,7 @@ class WorldBuilder {
               element
                   .addPerson(Person(PersonType.criminal, random.nextInt(100)));
             } else {
-              element.addPerson(Person(PersonType.snitch, random.nextInt(99)));
+              element.addPerson(Person(PersonType.snitch, random.nextInt(100)));
             }
           }
           break;
@@ -52,7 +55,7 @@ class WorldBuilder {
       }
     }
 
-    generateCrimes(world, random);
+    world.crimes = generateCrimes(world, random);
 
     return world;
   }
@@ -98,6 +101,7 @@ class WorldBuilder {
         victims.shuffle(random);
         fences.shuffle(random);
 
+        print("KLTest 100");
         for (var victim in victims) {
           if (victim.occupants[0].compitence > crime.highestCompitence) {
             crime.addAttemptedVictim(victim.occupants[0]);
@@ -112,8 +116,13 @@ class WorldBuilder {
             crime.fence = fence.occupants[0];
           }
         }
+        if (crime.victim != null) {
+          crimes.add(crime);
+        }
       }
     }
+
+    print("Generated crimes : " + crimes.toString());
 
     return crimes;
   }
@@ -151,6 +160,9 @@ enum BuildingType {
 }
 
 class Building {
+   int width = 10;
+  int height = 20;
+
   double x1;
   double y1;
   late double x2;
@@ -163,8 +175,8 @@ class Building {
   Valuable? valueables;
 
   Building(this.name, this.x1, this.y1) {
-    x2 = x1 + 10;
-    y2 = y1 + 20;
+    x2 = x1 + width;
+    y2 = y1 + height;
   }
 
   bool isInside(double x, double y) {
