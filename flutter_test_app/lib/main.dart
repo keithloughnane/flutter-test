@@ -45,10 +45,10 @@ class MyPainter extends StatelessWidget {
 
 //     canvas.drawRRect(RRect.fromLTRBR(100, 100, 200, 200, Radius.zero), paint);
 
-//     final textStyle = TextStyle(
-//       color: Colors.black,
-//       fontSize: 30,
-//     );
+    // final textStyle = TextStyle(
+    //   color: Colors.black,
+    //   fontSize: 30,
+    // );
 
 //     final textSpan = TextSpan(
 //       text: 'Hello, world.',
