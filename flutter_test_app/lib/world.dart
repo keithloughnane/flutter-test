@@ -1,13 +1,12 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 
 class World {
   int noBuildings = 20;
   late List<Building> buildings = <Building>[];
 
-  World() {
-    for(int i = 0; i < 20; i++) {
-      buildings.add(Building(i.toString(), 10, i * 22));
-    }
-  }
+  World() {}
 }
 
 class WorldBuilder {
@@ -18,8 +17,137 @@ class WorldBuilder {
   }
 
   World build() {
-    return World();
+    Random random = Random(100); //TODO from city name
+
+    var world = World();
+
+    for (int i = 0; i < 20; i++) {
+      var building = Building(i.toString(), 10, i * 22);
+      var type = BuildingType.values[random.nextInt(4)];
+      building.type = type;
+      world.buildings.add(building);
+    }
+
+    for (var element in world.buildings) {
+      switch (element.type) {
+        case BuildingType.home:
+          element.addPerson(Person(PersonType.civilian, random.nextInt(99)));
+          break;
+        case BuildingType.hangOut:
+          for (int i = 0; i < random.nextInt(7); i++) {
+            if (random.nextInt(10) < 8) {
+              element
+                  .addPerson(Person(PersonType.criminal, random.nextInt(100)));
+            } else {
+              element.addPerson(Person(PersonType.snitch, random.nextInt(99)));
+            }
+          }
+          break;
+        case BuildingType.victimBusiness:
+          element.addPerson(Person(PersonType.civilian, random.nextInt(99)));
+          break;
+        case BuildingType.fence:
+          element.addPerson(Person(PersonType.fence, random.nextInt(99)));
+          break;
+      }
+    }
+
+    generateCrimes(world, random);
+
+    return world;
   }
+
+  List<Crime> generateCrimes(World world, Random random) {
+    List<Building> victims = <Building>[];
+    List<Building> gangs = <Building>[];
+    List<Building> fences = <Building>[];
+
+    List<Crime> crimes = <Crime>[];
+
+    world.buildings.forEach((element) {
+      switch (element.type) {
+        case BuildingType.home:
+          break;
+        case BuildingType.hangOut:
+          gangs.add(element);
+          break;
+        case BuildingType.victimBusiness:
+          victims.add(element);
+          break;
+        case BuildingType.fence:
+          fences.add(element);
+          break;
+      }
+    });
+
+    for (var gang in gangs) {
+      //TODO maybe skip some.
+      if (gang.occupants.isNotEmpty) {
+        Crime crime = Crime();
+
+        crime.addCriminals(gang.occupants);
+
+        for (var criminal in gang.occupants) {
+          if (criminal.compitence > crime.highestCompitence) {
+            crime.highestCompitence = criminal.compitence;
+          } else if (criminal.compitence < crime.lowestCompitence) {
+            crime.lowestCompitence = criminal.compitence;
+          }
+        }
+
+        victims.shuffle(random);
+        fences.shuffle(random);
+
+        for (var victim in victims) {
+          if (victim.occupants[0].compitence > crime.highestCompitence) {
+            crime.addAttemptedVictim(victim.occupants[0]);
+            crime.victim = victim.occupants[0];
+            crime.hall = victim.valueables;
+          }
+        }
+
+        for (var fence in fences) {
+          if (fence.occupants[0].compitence > crime.highestCompitence) {
+            crime.addAttemptedFence(fence);
+            crime.fence = fence.occupants[0];
+          }
+        }
+      }
+    }
+
+    return crimes;
+  }
+}
+
+class Crime {
+  int lowestCompitence = 100;
+  int highestCompitence = 0;
+
+  Person? victim;
+  Valuable? hall;
+  Person? fence;
+
+  void addAttemptedVictim(Person occupant) {}
+
+  void addAttemptedFence(victim) {}
+
+  void addCriminals(List<Person> occupants) {}
+}
+
+enum PersonType { criminal, fence, snitch, civilian }
+
+class Person {
+  PersonType type;
+  int compitence;
+
+  Person(this.type, this.compitence);
+}
+
+enum BuildingType {
+  home,
+  hangOut,
+  victimBusiness,
+  fence,
 }
 
 class Building {
@@ -28,8 +156,11 @@ class Building {
   late double x2;
   late double y2;
   bool selected = false;
+  BuildingType? type;
 
   String name;
+
+  Valuable? valueables;
 
   Building(this.name, this.x1, this.y1) {
     x2 = x1 + 10;
@@ -47,6 +178,40 @@ class Building {
 
   @override
   String toString() {
-    return "$name\n($x1,$y1)";
+    return "$type\n${occupantsString(occupants)}";
   }
+
+  List<Person> occupants = <Person>[];
+
+  void addPerson(Person person) {
+    occupants.add(person);
+  }
+
+  String occupantsString(List<Person> occupants) {
+    String result = "";
+    for (var element in occupants) {
+      switch (element.type) {
+        case PersonType.criminal:
+          result += "C";
+          break;
+        case PersonType.fence:
+          result += "F";
+          break;
+        case PersonType.snitch:
+          result += "S";
+          break;
+        case PersonType.civilian:
+          result += "_";
+          break;
+      }
+    }
+    return result;
+  }
+}
+
+class Valuable {
+  String name;
+  int value;
+
+  Valuable(this.name, this.value);
 }
