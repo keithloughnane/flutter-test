@@ -7,9 +7,9 @@ class OverWorldGame extends Game {
 
   }
 
-  var offsetX = 10.0;
-  var offsetY = 10.0;
-  var scale = 3.0;
+  var offsetX = 0.0;
+  var offsetY = 0.0;
+  var scale = 5.0;
 
   late World world;
 
@@ -28,11 +28,11 @@ class OverWorldGame extends Game {
 
   void showCrimeDetails(Canvas canvas, Crime? crime) {
     if (crime != null) {
-      print("KLTest victim = " + crime.victim.toString());
+      //print("KLTest victim = " + crime.victim.toString());
 
       var victim = getBuildingFromPerson(crime.victim);
 
-      print("KLTest victim building = " + victim.toString());
+      //print("KLTest victim building = " + victim.toString());
 
       var fence = getBuildingFromPerson(crime.fence);
 
@@ -101,6 +101,8 @@ class OverWorldGame extends Game {
   void clicked(double x, double y) {
     findSelectedBuilding(
         world.buildings, (x - offsetX) / scale, (y - offsetY) / scale);
+
+
   }
 
   void findSelectedBuilding(List<Building> buildings, double x, double y) {

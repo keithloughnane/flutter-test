@@ -21,13 +21,18 @@ class WorldBuilder {
     Random random = Random(100); //TODO from city name
 
     var world = World();
+    double gapX = 0.0;
 
     for (int x = 0; x < 10; x++) {
-      for (int y = 0; y < 8; y++) {
-        var building = Building("", x * 11, y * 22);
+      for (int y = 0; y < 11; y++) {
+        var building = Building("", (x * 20) + gapX, y * 10, 20, 10);
         var type = BuildingType.values[random.nextInt(4)];
         building.type = type;
         world.buildings.add(building);
+      }
+
+      if (x % 2 == 0) {
+        gapX += 20;
       }
     }
 
@@ -101,7 +106,7 @@ class WorldBuilder {
         victims.shuffle(random);
         fences.shuffle(random);
 
-        print("KLTest 100");
+        //print("KLTest 100");
         for (var victim in victims) {
           if (victim.occupants[0].compitence > crime.highestCompitence) {
             crime.addAttemptedVictim(victim.occupants[0]);
@@ -160,8 +165,8 @@ enum BuildingType {
 }
 
 class Building {
-   int width = 10;
-  int height = 20;
+  late double width;
+  late double height;
 
   double x1;
   double y1;
@@ -174,7 +179,7 @@ class Building {
 
   Valuable? valueables;
 
-  Building(this.name, this.x1, this.y1) {
+  Building(this.name, this.x1, this.y1, this.width, this.height) {
     x2 = x1 + width;
     y2 = y1 + height;
   }
@@ -184,7 +189,7 @@ class Building {
   }
 
   void setSelected(bool selected) {
-    print("KLTest selected : " + y1.toString());
+    //print("KLTest selected : " + y1.toString());
     this.selected = selected;
   }
 
