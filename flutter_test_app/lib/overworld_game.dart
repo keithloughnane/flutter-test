@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'world.dart';
 
-class OverWorldGame {
+class OverWorldGame extends Game {
+  OverWorldGame(BuildContext context) {
+
+  }
+
   var offsetX = 10.0;
   var offsetY = 10.0;
   var scale = 3.0;
@@ -34,15 +38,15 @@ class OverWorldGame {
 
       if (victim != null) {
         var offset = Offset(
-            (victim.x1 + (victim.width / 2)  + offsetX) * scale,
+            (victim.x1 + (victim.width / 2) + offsetX) * scale,
             (victim.y1 + (victim.height / 2) + offsetY) *
                 scale); //TODO make my own draw methods so I can reuse scale and offset
         canvas.drawCircle(offset, 10, selectedPaint);
       }
 
       if (fence != null) {
-        var offset =
-            Offset((fence.x1 + (fence.width / 2) + offsetX) * scale, (fence.y1 + (fence.height / 2) + offsetY) * scale);
+        var offset = Offset((fence.x1 + (fence.width / 2) + offsetX) * scale,
+            (fence.y1 + (fence.height / 2) + offsetY) * scale);
         canvas.drawCircle(offset, 10, circlePaint);
       }
     }
@@ -86,7 +90,8 @@ class OverWorldGame {
 
       for (var crime in world.crimes!) {
         showCrimeDetails(canvas, crime);
-      }}
+      }
+    }
   }
 
   void setWorld(World world) {
@@ -115,4 +120,12 @@ class OverWorldGame {
 
     return result;
   }
+}
+
+abstract class Game {
+  void render(Canvas canvas, Size size);
+
+  void setWorld(World world);
+
+  void clicked(double dx, double dy);
 }

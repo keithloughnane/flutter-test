@@ -42,7 +42,7 @@ class MyPainter extends StatelessWidget {
                   Expanded(
                     child: SizedBox.expand(
                       child: CustomPaint(
-                        painter: MetaGame("WINDY_HILL").getView(),
+                        painter: MetaGame("WINDY_HILL", context).getView(),
                         child: Container(),
                       ),
                     ),
