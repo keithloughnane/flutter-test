@@ -13,6 +13,24 @@ class ComicGame extends Game {
     late ImageInfo mouth;
     late ImageInfo fringe;
 
+    var bgPaint = Paint()
+        ..color = const Color.fromARGB(120, 0, 0, 0)
+        ..style = PaintingStyle.fill;
+
+    var textBgPaint = Paint()
+        ..color = const Color.fromARGB(120, 0, 0, 0)
+        ..style = PaintingStyle.fill;
+
+    var imagePaint = Paint()
+        ..color = const Color.fromARGB(254, 0, 0, 0)
+        ..style = PaintingStyle.fill;
+
+    List<SpeechOptions> speechOptions = <SpeechOptions>[];
+
+    
+
+  Size? oldSize;
+    
     ComicGame(BuildContext context) {
         getImageInfo(context, "hair_1").then((value) => hair = value);
         getImageInfo(context, "face_1").then((value) => face = value);
@@ -20,6 +38,7 @@ class ComicGame extends Game {
         getImageInfo(context, "mouth_1").then((value) => mouth = value);
         getImageInfo(context, "eyes_1").then((value) => eyes = value);
         getImageInfo(context, "fringe_1").then((value) => fringe = value);
+
     }
 
     Future<ImageInfo> getImageInfo(BuildContext context, String asset) async {
@@ -38,27 +57,26 @@ class ComicGame extends Game {
         // TODO: implement clicked
     }
 
-    var selectedPaint = Paint()
-    ..color = const Color.fromARGB(254, 254, 0, 0)
-    ..style = PaintingStyle.fill;
+
 
     @override
     void render(Canvas canvas, Size size) {
+        setSize(size);
+        
         canvas.drawRect(
-                Rect.fromLTRB(0, 0, size.width, size.height), selectedPaint);
+                Rect.fromLTRB(0, 0, size.width, size.height), bgPaint);
 
-        canvas.drawImage(hair.image, Offset(0, 0), selectedPaint);
-        canvas.drawImage(face.image, Offset(0, 0), selectedPaint);
-        canvas.drawImage(fringe.image, Offset(0, 000), selectedPaint);
-        canvas.drawImage(eyes.image, Offset(0, 100), selectedPaint);
-        canvas.drawImage(nose.image, Offset(0, 200), selectedPaint);
-        canvas.drawImage(mouth.image, Offset(0, 300), selectedPaint);
+        canvas.drawImage(hair.image, Offset(0, 0), imagePaint);
+        canvas.drawImage(face.image, Offset(0, 0), imagePaint);
+        canvas.drawImage(fringe.image, Offset(0, 000), imagePaint);
+        canvas.drawImage(eyes.image, Offset(0, 100), imagePaint);
+        canvas.drawImage(nose.image, Offset(0, 200), imagePaint);
+        canvas.drawImage(mouth.image, Offset(0, 300), imagePaint);
 
-        drawSpeechOptions(canvas, "TEST");
-
-
-
-
+        drawSpeechOptions(canvas, "Hello", 10, size.height - 90);
+        drawSpeechOptions(canvas, "Hello", 10, size.height - 60);
+        drawSpeechOptions(canvas, "Bribe", 10, size.height - 30);
+        drawSpeechOptions(canvas, "TEST2", 10, size.height - 0);
     }
 
     @override
@@ -66,34 +84,54 @@ class ComicGame extends Game {
         // TODO: implement setWorld
     }
 
-    void drawSpeechOptions(Canvas canvas, String s) {
+    void drawSpeechOptions(Canvas canvas, String s, double x, double y) {
         canvas.drawRRect(
                 RRect.fromLTRBR(
-                        0,
-                        0,
-                        150,
-                        50,
+                        x,
+                        y,
+                        x + 180,
+                        y + 25,
                         Radius.zero),
-                selectedPaint);
-
-        final textSpan = TextSpan(
-                text: s,
-        );
+                textBgPaint);
 
         var textPainter = TextPainter(
-                text: textSpan,
+                text: TextSpan(text: s),
                 textDirection: TextDirection.ltr,
         );
 
-        textPainter.layout(
-                minWidth: 30,
-        maxWidth: 100,
-        );
-
-        final offset = Offset(
-                0, 0);
-
-        textPainter.paint(canvas, offset);
-
+        textPainter.layout(minWidth: 20, maxWidth: 160);
+        textPainter.paint(canvas, Offset(x+10, y+10));
     }
+
+  void setSize(Size size) {
+        if (size != oldSize) {
+            oldSize = size;
+            setSpeech(size);
+        }
+  }
+
+  void setSpeech(Size size) {
+      speechOptions.add(SpeechOptions("Hello", 10, size.height - 90));
+      speechOptions.add(SpeechOptions( "Hello", 10, size.height - 60));
+      speechOptions.add(SpeechOptions("Bribe", 10, size.height - 30));
+      speechOptions.add(SpeechOptions("TEST2", 10, size.height - 0));
+  }
+}
+
+class SpeechOptions {
+  String text;
+  late double x1;
+  late double y1;
+  bool selected = false;
+  late double x2;
+  late double y2;
+
+  bool isInside(double x, double y) {
+    return (x > x1 && x < x2 && y > y1 && y < y2);
+  }
+
+  SpeechOptions(this.text, this.x1, this.y1) {
+      x2 = x1 + 180;
+      y2 = y1 + 25;
+  }
 }
