@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'game.dart';
 import 'world.dart';
 
 class OverWorldGame extends Game {
@@ -124,10 +125,4 @@ class OverWorldGame extends Game {
   }
 }
 
-abstract class Game {
-  void render(Canvas canvas, Size size);
 
-  void setWorld(World world);
-
-  void clicked(double dx, double dy);
-}
