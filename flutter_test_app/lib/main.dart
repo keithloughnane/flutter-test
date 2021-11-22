@@ -99,10 +99,10 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTapDown: meta.onTapDown(),
-        onTapUp: meta.onTapUp(),
-        onVerticalDragUpdate: meta.vDrag(),
-        onHorizontalDragUpdate: meta.hDrag(),
+        onTapDown: meta.onTapDown,
+        onTapUp: meta.onTapUp,
+        onVerticalDragUpdate: meta.vDrag,
+        onHorizontalDragUpdate: meta.hDrag,
         child: AnimatedBuilder(
           animation: _animation,
           builder: (BuildContext context, Widget? child) {
