@@ -9,4 +9,8 @@ abstract class Game {
   void setWorld(World world);
 
   void clicked(double dx, double dy);
+
+  void right() {
+
+  }
 }

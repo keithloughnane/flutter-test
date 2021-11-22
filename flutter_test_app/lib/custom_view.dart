@@ -63,6 +63,10 @@ class MetaGame extends CustomPainter {
   MetaGame getView() {
     return this;
   }
+
+  void right() {
+    loadedGames[0].right();
+  }
 }
 
 

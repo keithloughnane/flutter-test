@@ -66,12 +66,12 @@ class ComicGame extends Game {
         canvas.drawRect(
                 Rect.fromLTRB(0, 0, size.width, size.height), bgPaint);
 
-        canvas.drawImage(hair.image, Offset(0, 0), imagePaint);
-        canvas.drawImage(face.image, Offset(0, 0), imagePaint);
-        canvas.drawImage(fringe.image, Offset(0, 000), imagePaint);
-        canvas.drawImage(eyes.image, Offset(0, 100), imagePaint);
-        canvas.drawImage(nose.image, Offset(0, 200), imagePaint);
-        canvas.drawImage(mouth.image, Offset(0, 300), imagePaint);
+        canvas.drawImage(hair.image, Offset(0, 10), imagePaint);
+        canvas.drawImage(face.image, Offset(0, 10), imagePaint);
+        canvas.drawImage(fringe.image, Offset(0, 10), imagePaint);
+        canvas.drawImage(eyes.image, Offset(0, 70), imagePaint);
+        canvas.drawImage(nose.image, Offset(0, 120), imagePaint);
+        canvas.drawImage(mouth.image, Offset(0, 160), imagePaint);
 
         drawSpeechOptions(canvas, "Hello", 10, size.height - 90);
         drawSpeechOptions(canvas, "Hello", 10, size.height - 60);

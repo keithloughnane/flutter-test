@@ -123,6 +123,12 @@ class OverWorldGame extends Game {
 
     return result;
   }
+
+  @override
+  void right() {
+    // TODO: implement right
+    offsetX += 10;
+  }
 }
 
 
