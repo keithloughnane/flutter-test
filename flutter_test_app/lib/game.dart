@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_test_app/world.dart';
 
 abstract class Game {
@@ -13,4 +14,6 @@ abstract class Game {
   void right() {
 
   }
+
+  void setUp(BuildContext context);
 }

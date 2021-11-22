@@ -3,6 +3,10 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 class World {
+  var offsetX = 0.0;
+  var offsetY = 0.0;
+  var scale = 5.0;
+
   int noBuildings = 20;
   late List<Building> buildings = <Building>[];
   List<Crime>? crimes;

@@ -4,14 +4,6 @@ import 'game.dart';
 import 'world.dart';
 
 class OverWorldGame extends Game {
-  OverWorldGame(BuildContext context) {
-
-  }
-
-  var offsetX = 0.0;
-  var offsetY = 0.0;
-  var scale = 5.0;
-
   late World world;
 
   static const textStyle = TextStyle(
@@ -39,28 +31,30 @@ class OverWorldGame extends Game {
 
       if (victim != null) {
         var offset = Offset(
-            (victim.x1 + (victim.width / 2) + offsetX) * scale,
-            (victim.y1 + (victim.height / 2) + offsetY) *
-                scale); //TODO make my own draw methods so I can reuse scale and offset
+            (victim.x1 + (victim.width / 2) + world.offsetX) * world.scale,
+            (victim.y1 + (victim.height / 2) + world.offsetY) *
+                world.scale); //TODO make my own draw methods so I can reuse scale and offset
         canvas.drawCircle(offset, 10, selectedPaint);
       }
 
       if (fence != null) {
-        var offset = Offset((fence.x1 + (fence.width / 2) + offsetX) * scale,
-            (fence.y1 + (fence.height / 2) + offsetY) * scale);
+        var offset = Offset((fence.x1 + (fence.width / 2) + world.offsetX) * world.scale,
+            (fence.y1 + (fence.height / 2) + world.offsetY) * world.scale);
         canvas.drawCircle(offset, 10, circlePaint);
       }
     }
   }
 
   void render(Canvas canvas, Size size) {
+    world.offsetX += 10;
+
     for (var building in world.buildings) {
       canvas.drawRRect(
           RRect.fromLTRBR(
-              (building.x1 + offsetX) * scale,
-              (building.y1 + offsetY) * scale,
-              (building.x2 + offsetX) * scale,
-              (building.y2 + offsetY) * scale,
+              (building.x1 + world.offsetX) * world.scale,
+              (building.y1 + world.offsetY) * world.scale,
+              (building.x2 + world.offsetX) * world.scale,
+              (building.y2 + world.offsetY) * world.scale,
               Radius.zero),
           building.selected ? selectedPaint : circlePaint);
 
@@ -76,11 +70,11 @@ class OverWorldGame extends Game {
 
       textPainter.layout(
         minWidth: 0,
-        maxWidth: (building.x2 - building.x1) * scale,
+        maxWidth: (building.x2 - building.x1) * world.scale,
       );
 
       final offset = Offset(
-          (building.x1 + offsetX) * scale, (building.y1 + offsetY) * scale);
+          (building.x1 + world.offsetX) * world.scale, (building.y1 + world.offsetY) * world.scale);
 
       textPainter.paint(canvas, offset);
 
@@ -95,13 +89,15 @@ class OverWorldGame extends Game {
     }
   }
 
+
+
   void setWorld(World world) {
     this.world = world;
   }
 
   void clicked(double x, double y) {
     findSelectedBuilding(
-        world.buildings, (x - offsetX) / scale, (y - offsetY) / scale);
+        world.buildings, (x - world.offsetX) / world.scale, (y - world.offsetY) / world.scale);
 
 
   }
@@ -127,7 +123,12 @@ class OverWorldGame extends Game {
   @override
   void right() {
     // TODO: implement right
-    offsetX += 10;
+    world.offsetX += 10;
+  }
+
+  @override
+  void setUp(BuildContext context) {
+    // TODO: implement setUp
   }
 }
 

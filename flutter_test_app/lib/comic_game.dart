@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'game.dart';
 
 class ComicGame extends Game {
-    late ImageInfo eyes;
-    late ImageInfo hair;
-    late ImageInfo face;
-    late ImageInfo nose;
-    late ImageInfo mouth;
-    late ImageInfo fringe;
+     ImageInfo? eyes;
+     ImageInfo? hair;
+     ImageInfo? face;
+     ImageInfo? nose;
+     ImageInfo? mouth;
+     ImageInfo? fringe;
 
     var bgPaint = Paint()
         ..color = const Color.fromARGB(120, 0, 0, 0)
@@ -30,15 +30,16 @@ class ComicGame extends Game {
     
 
   Size? oldSize;
+
+
     
-    ComicGame(BuildContext context) {
+    setupImages(BuildContext context) {
         getImageInfo(context, "hair_1").then((value) => hair = value);
         getImageInfo(context, "face_1").then((value) => face = value);
         getImageInfo(context, "nose_1").then((value) => nose = value);
         getImageInfo(context, "mouth_1").then((value) => mouth = value);
         getImageInfo(context, "eyes_1").then((value) => eyes = value);
         getImageInfo(context, "fringe_1").then((value) => fringe = value);
-
     }
 
     Future<ImageInfo> getImageInfo(BuildContext context, String asset) async {
@@ -66,12 +67,25 @@ class ComicGame extends Game {
         canvas.drawRect(
                 Rect.fromLTRB(0, 0, size.width, size.height), bgPaint);
 
-        canvas.drawImage(hair.image, Offset(0, 10), imagePaint);
-        canvas.drawImage(face.image, Offset(0, 10), imagePaint);
-        canvas.drawImage(fringe.image, Offset(0, 10), imagePaint);
-        canvas.drawImage(eyes.image, Offset(0, 70), imagePaint);
-        canvas.drawImage(nose.image, Offset(0, 120), imagePaint);
-        canvas.drawImage(mouth.image, Offset(0, 160), imagePaint);
+    if (hair != null) {
+      canvas.drawImage(hair!.image, Offset(0, 10), imagePaint);
+    }
+        if (face != null) {
+          canvas.drawImage(face!.image, Offset(0, 10), imagePaint);
+        }
+        if (fringe != null) {
+          canvas.drawImage(fringe!.image, Offset(0, 10), imagePaint);
+        }
+        if (eyes != null) {
+          canvas.drawImage(eyes!.image, Offset(0, 70), imagePaint);
+        }
+        if (nose != null) {
+          canvas.drawImage(nose!.image, Offset(0, 120), imagePaint);
+        }
+        if (mouth != null) {
+          canvas.drawImage(mouth!.image, Offset(0, 160), imagePaint);
+        }
+
 
         drawSpeechOptions(canvas, "Hello", 10, size.height - 90);
         drawSpeechOptions(canvas, "Hello", 10, size.height - 60);
@@ -115,6 +129,11 @@ class ComicGame extends Game {
       speechOptions.add(SpeechOptions( "Hello", 10, size.height - 60));
       speechOptions.add(SpeechOptions("Bribe", 10, size.height - 30));
       speechOptions.add(SpeechOptions("TEST2", 10, size.height - 0));
+  }
+
+  @override
+  void setUp(BuildContext context) {
+    setupImages(context);
   }
 }
 

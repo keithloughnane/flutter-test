@@ -13,12 +13,12 @@ class MetaGame extends CustomPainter {
 
   Size? size;
 
-  MetaGame(String cityName, BuildContext context) {
+  MetaGame(String cityName) {
     var builder = WorldBuilder();
     builder.setName(cityName);
     world = builder.build();
 
-    loadedGames = <Game>[OverWorldGame(context), ComicGame(context)];
+    loadedGames = <Game>[OverWorldGame(), ComicGame()];
 
     loadedGames.forEach((element) {
       element.setWorld(world);
@@ -28,13 +28,15 @@ class MetaGame extends CustomPainter {
   @override
   bool? hitTest(Offset position) {
     print("KLTest hitTest " + position.toString());
+    world.offsetY += 30;
+
     loadedGames[0].clicked(position.dx, position.dy);
 
-    if (position.dx < 100.0) {
-      (loadedGames[0] as OverWorldGame).offsetX -= 15;
-    } else if (position.dx > size!.width - 100.0) {
-      (loadedGames[0] as OverWorldGame).offsetX += 15;
-    }
+    // if (position.dx < 100.0) {
+    //   (loadedGames[0] as OverWorldGame).offsetX -= 15;
+    // } else if (position.dx > size!.width - 100.0) {
+    //   (loadedGames[0] as OverWorldGame).offsetX += 15;
+    // }
     //
     // else if (position.dy < 100.0) {
     //   (loadedGames[0] as OverWorldGame).offsetY -= 15;
@@ -53,6 +55,7 @@ class MetaGame extends CustomPainter {
     canvas.save();
     canvas.translate(size.width - 200, 0);
     loadedGames[1].render(canvas, Size(size.width - 200, size.height));
+    canvas.restore();
   }
 
   @override
@@ -66,6 +69,25 @@ class MetaGame extends CustomPainter {
 
   void right() {
     loadedGames[0].right();
+  }
+
+  MetaGame setUp(BuildContext context) {
+    loadedGames.forEach((element) {
+      element.setUp(context);
+    });
+
+        return this;
+  }
+
+  onTapDown() {}
+
+  onTapUp() {}
+
+  vDrag() {}
+
+  hDrag() {
+    print("KLTest hDrag offset = " + world.offsetX.toString());
+        world.offsetX + 30;
   }
 }
 
