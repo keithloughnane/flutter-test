@@ -7,7 +7,7 @@ import 'comic_game.dart';
 import 'game.dart';
 import 'overworld_game.dart';
 
-class MetaGame extends CustomPainter {
+class MetaGame {
   List<Game> loadedGames = <Game>[];
   late World world;
 
@@ -25,10 +25,54 @@ class MetaGame extends CustomPainter {
     });
   }
 
+  GameRenderer getView() {
+    return GameRenderer(loadedGames);
+  }
+
+  void right() {
+    loadedGames[0].right();
+  }
+
+  MetaGame setUp(BuildContext context) {
+    loadedGames.forEach((element) {
+      element.setUp(context);
+    });
+
+    return this;
+  }
+
+  onTapDown() {}
+
+  onTapUp() {}
+
+  vDrag() {}
+
+  hDrag() {
+    print("KLTest hDrag offset = " + world.offsetX.toString());
+    world.offsetX + 30;
+  }
+}
+
+class GameRenderer extends CustomPainter {
+  List<Game> loadedGames;
+
+  GameRenderer(this.loadedGames);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    print("KLTest paint called");
+    //this.size = size;
+    loadedGames[0].render(canvas, size);
+    canvas.save();
+    canvas.translate(size.width - 200, 0);
+    loadedGames[1].render(canvas, Size(size.width - 200, size.height));
+    canvas.restore();
+  }
+
   @override
   bool? hitTest(Offset position) {
     print("KLTest hitTest " + position.toString());
-    world.offsetY += 30;
+    //world.offsetY += 30;
 
     loadedGames[0].clicked(position.dx, position.dy);
 
@@ -47,48 +91,8 @@ class MetaGame extends CustomPainter {
     return super.hitTest(position);
   }
 
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    this.size = size;
-    loadedGames[0].render(canvas, size);
-    canvas.save();
-    canvas.translate(size.width - 200, 0);
-    loadedGames[1].render(canvas, Size(size.width - 200, size.height));
-    canvas.restore();
-  }
-
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
-
-  MetaGame getView() {
-    return this;
-  }
-
-  void right() {
-    loadedGames[0].right();
-  }
-
-  MetaGame setUp(BuildContext context) {
-    loadedGames.forEach((element) {
-      element.setUp(context);
-    });
-
-        return this;
-  }
-
-  onTapDown() {}
-
-  onTapUp() {}
-
-  vDrag() {}
-
-  hDrag() {
-    print("KLTest hDrag offset = " + world.offsetX.toString());
-        world.offsetX + 30;
-  }
 }
-
-

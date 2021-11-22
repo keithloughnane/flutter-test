@@ -46,7 +46,7 @@ class OverWorldGame extends Game {
   }
 
   void render(Canvas canvas, Size size) {
-    world.offsetX += 10;
+    //world.offsetX += 1;
 
     for (var building in world.buildings) {
       canvas.drawRRect(
@@ -96,6 +96,8 @@ class OverWorldGame extends Game {
   }
 
   void clicked(double x, double y) {
+    //world.offsetX += 10;
+
     findSelectedBuilding(
         world.buildings, (x - world.offsetX) / world.scale, (y - world.offsetY) / world.scale);
 
@@ -123,7 +125,7 @@ class OverWorldGame extends Game {
   @override
   void right() {
     // TODO: implement right
-    world.offsetX += 10;
+    //world.offsetX += 10;
   }
 
   @override
